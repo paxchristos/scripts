@@ -160,10 +160,12 @@ if ($null -ne $Mpeg4)
     Write-Output "MP4 Found"
     Write-Output $Mpeg4.count
 
-foreach ($file in $Mpeg4)
+    foreach ($file in $Mpeg4)
     {
         ## Variables in loop
         Write-Output $file.name
+        $tempname = [io.path]::GetFileNameWithoutExtension("$file")
+        $tempname = "$tempname"+".mkv"
         $bitrate    = 0
         $temp1      = [math]::Round((mediainfo.exe --inform="General;%OverallBitRate%" $file.Name) / 1024,2)
         $temp2      = [math]::Round((mediainfo.exe --inform="Video;%BitRate%" $file.Name) / 1024,2)
@@ -188,15 +190,13 @@ foreach ($file in $Mpeg4)
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "temp.mkv" "$file"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "temp.mkv" "$file"
                 }
             }
             elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
@@ -204,15 +204,13 @@ foreach ($file in $Mpeg4)
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item ""temp.mkv"" "$file"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item ""temp.mkv"" "$file"
                 }
             }
             else
@@ -220,15 +218,13 @@ foreach ($file in $Mpeg4)
                 Write-Output "SD"
                 if ( $bitrate -gt $maxsdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
-                    move-item "temp.mkv" "$file"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
-                    move-item "temp.mkv" "$file"
                 }
             }
         }
@@ -240,15 +236,13 @@ foreach ($file in $Mpeg4)
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "temp.mkv" "$file"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "temp.mkv" "$file"
                 }
             }
             elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
@@ -256,15 +250,13 @@ foreach ($file in $Mpeg4)
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item ""temp.mkv"" "$file"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item ""temp.mkv"" "$file"
                 }
             }
             else
@@ -272,15 +264,13 @@ foreach ($file in $Mpeg4)
                 Write-Output "SD"
                 if ( $bitrate -gt $maxsdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
-                    move-item "temp.mkv" "$file"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
-                    move-item "temp.mkv" "$file"
                 }
             }
         }
@@ -311,21 +301,20 @@ if ($null -ne $WindowsMedia)
         $vert   = mediainfo.exe --Inform="Video;%Height%" $file.name
         $hort   = mediainfo.exe --Inform="Video;%Width%" $file.name
         $tempbr = ($bitrate/4*3)
+        $tempname = "$tempname"+".mkv"
 
         if  (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
         {
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item "temp.mkv" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item "temp.mkv" "$file"
             }
         }
         elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
@@ -333,15 +322,13 @@ if ($null -ne $WindowsMedia)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item ""temp.mkv"" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item ""temp.mkv"" "$file"
             }
         }
         else
@@ -349,15 +336,13 @@ if ($null -ne $WindowsMedia)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
-                move-item "temp.mkv" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
-                move-item "temp.mkv" "$file"
             }
         }
         
@@ -370,7 +355,7 @@ if ($null -ne $AudioVideo)
     Write-Output "AVI Found"
     Write-Output $AudioVideo.count
 
-foreach ($file in $AudioVideo)
+    foreach ($file in $AudioVideo)
     {
         ## Variables in loop
         Write-Output $file.name
@@ -388,21 +373,20 @@ foreach ($file in $AudioVideo)
         $vert   = mediainfo.exe --Inform="Video;%Height%" $file.name
         $hort   = mediainfo.exe --Inform="Video;%Width%" $file.name
         $tempbr = ($bitrate/4*3)
+        $tempname = "$tempname"+".mkv"
 
         if  (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
         {
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item "temp.mkv" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item "temp.mkv" "$file"
             }
         }
         elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
@@ -410,15 +394,13 @@ foreach ($file in $AudioVideo)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item ""temp.mkv"" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item ""temp.mkv"" "$file"
             }
         }
         else
@@ -426,17 +408,16 @@ foreach ($file in $AudioVideo)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
-                move-item "temp.mkv" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
-                move-item "temp.mkv" "$file"
             }
         }
+        
     }
 }
 
@@ -446,7 +427,7 @@ if ($null -ne $divx)
     Write-Output "divx Found"
     Write-Output $divx.count
 
-foreach ($file in $divx)
+    foreach ($file in $divx)
     {
         ## Variables in loop
         Write-Output $file.name
@@ -464,21 +445,20 @@ foreach ($file in $divx)
         $vert   = mediainfo.exe --Inform="Video;%Height%" $file.name
         $hort   = mediainfo.exe --Inform="Video;%Width%" $file.name
         $tempbr = ($bitrate/4*3)
+        $tempname = "$tempname"+".mkv"
 
         if  (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
         {
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item "temp.mkv" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item "temp.mkv" "$file"
             }
         }
         elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
@@ -486,15 +466,13 @@ foreach ($file in $divx)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item ""temp.mkv"" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item ""temp.mkv"" "$file"
             }
         }
         else
@@ -502,17 +480,16 @@ foreach ($file in $divx)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
-                move-item "temp.mkv" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
-                move-item "temp.mkv" "$file"
             }
         }
+        
     }
 }
 
@@ -522,7 +499,7 @@ if ($null -ne $Mpeg)
     Write-Output "MPG Found"
     Write-Output $Mpeg.count
 
-foreach ($file in $Mpeg)
+    foreach ($file in $Mpeg)
     {
         ## Variables in loop
         Write-Output $file.name
@@ -540,21 +517,20 @@ foreach ($file in $Mpeg)
         $vert   = mediainfo.exe --Inform="Video;%Height%" $file.name
         $hort   = mediainfo.exe --Inform="Video;%Width%" $file.name
         $tempbr = ($bitrate/4*3)
+        $tempname = "$tempname"+".mkv"
 
         if  (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
         {
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item "temp.mkv" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item "temp.mkv" "$file"
             }
         }
         elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
@@ -562,15 +538,13 @@ foreach ($file in $Mpeg)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item ""temp.mkv"" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
-                Move-Item ""temp.mkv"" "$file"
             }
         }
         else
@@ -578,17 +552,16 @@ foreach ($file in $Mpeg)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
-                move-item "temp.mkv" "$file"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
-                move-item "temp.mkv" "$file"
             }
         }
+        
     }
 }
 
