@@ -571,7 +571,7 @@ if ($null -ne $Mpeg4v)
     Write-Output "M4V Found"
     Write-Output $Mpeg4v.count
 
-foreach ($file in $Mpeg4v)
+    foreach ($file in $Mpeg4v)
     {
         ## Variables in loop
         Write-Output $file.name
