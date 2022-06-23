@@ -26,9 +26,10 @@ if ($null -ne $Matroska)
 {
     Write-Output "MKV Found"
     Write-Output $Matroska.count
-
     foreach ($file in $Matroska)
     {
+        $tempname = [io.path]::GetFileNameWithoutExtension("$file")
+        $fullpath = $file | Select-Object FullName
         ## Variables in loop
         Write-Output $file.name
         $bitrate    = 0
@@ -55,9 +56,9 @@ if ($null -ne $Matroska)
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "temp.mkv" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "temp.mkv" "$file"
+                    Move-Item "$tempname" "$file"
                 }
                 else
                 {
@@ -165,7 +166,7 @@ if ($null -ne $Mpeg4)
         ## Variables in loop
         Write-Output $file.name
         $tempname = [io.path]::GetFileNameWithoutExtension("$file")
-        $tempname = "$tempname"+".mkv"
+        $tempname = "$($tempname).mkv"
         $bitrate    = 0
         $temp1      = [math]::Round((mediainfo.exe --inform="General;%OverallBitRate%" $file.Name) / 1024,2)
         $temp2      = [math]::Round((mediainfo.exe --inform="Video;%BitRate%" $file.Name) / 1024,2)
