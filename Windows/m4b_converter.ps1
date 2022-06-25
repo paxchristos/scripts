@@ -57,5 +57,5 @@ ForEach ($directory in $directories)
 <#MP3Tag - used to tag the audiobooks - https://www.mp3tag.de/en/ #>
 <#MP3Tag Audible Audobook tag scrapper - https://github.com/seanap/Audible.com-Search-by-Album #>
 <#MP3Tag Goodreads book tag scrapper (For when a book isn't in audible) - https://community.mp3tag.de/t/ws-goodreads-for-audiobooks/52147 #>
-<#MP3Tag Tag -> Filename <Audiobook Shared Folder>\<Path>\%albumartist%\%series%\[ '['%series% %series-part%,2']']%album%\['['%series% %series-part%,2']' ]%album% #>
+<#MP3Tag Tag -> Filename <Audiobook Shared Folder>\<Path>\%albumartist%\%series%\[ '['%series% - $num(%series-part%,2)']']%album%\['['%series% - $num(%series-part%,2)']' ]%album% #>
 <#                                                  [path]\[Author of book]\[Series Name]\[Series Name - Part ##] [Book Title]\[Series Name - Part ##] Album.m4b #> 
