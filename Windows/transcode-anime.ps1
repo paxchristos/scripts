@@ -59,13 +59,13 @@ if ($null -ne $Matroska)
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
                 else
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
             }
             elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
@@ -75,13 +75,13 @@ if ($null -ne $Matroska)
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
                 else
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
             }
             else
@@ -91,13 +91,13 @@ if ($null -ne $Matroska)
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
-                    move-item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
                 else
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
-                    move-item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
             }
         }
@@ -111,13 +111,13 @@ if ($null -ne $Matroska)
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
                 else
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
             }
             elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
@@ -127,13 +127,13 @@ if ($null -ne $Matroska)
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item ""$tempname"" "$original"
+                    rename-Item "$tempname" "$original"
                 }
                 else
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
-                    Move-Item ""$tempname"" "$original"
+                    rename-Item "$tempname" "$original"
                 }
             }
             else
@@ -143,13 +143,13 @@ if ($null -ne $Matroska)
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
-                    move-item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
                 else
                 {
                     HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder aac --audio-copy-mask aac --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
-                    move-item "$tempname" "$original"
+                    rename-Item "$tempname" "$original"
                 }
             }
         }
