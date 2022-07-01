@@ -7,10 +7,10 @@ foreach ($file in $mkv)
 {
     echo "$file"
     $tempname = "s01e$($counter).mkv"
-    $wordsathome=[System.IO.Path]::GetFileNameWithoutExtension($file)
-    mkvmerge.exe --output "$tempname" "$file" "$($counter).mka"
+    $wordsathome = [System.IO.Path]::GetFileNameWithoutExtension($file)
+    $mkaname = $wordsathome+".mka"
+    mkvmerge.exe --output "$tempname" "$file" "$mkaname"
     remove-item "$($counter).mka"
     remove-item "$file"
     move-item "$tempname" "$($wordsathome).mkv"
-    $counter++
 }
