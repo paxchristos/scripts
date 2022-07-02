@@ -7,6 +7,8 @@ If the filename starts with **Remove-** is used for removing Intro(s) from all M
 **Dual_audio.ps1** is used to merge matching mkv and mka files in a folder
 **merge_srt.ps1** is used to merge matching mkv and srt files (along with .en.srt files) in a folder
 
+**remux.ps1** remuxes containers from mp4 to mkv
+
 **transcode-** is used to transcode all video files (mkv, mp4, wmv, avi, divx, mpg, m4v) in a folder from original codec to h265 using the bitrates setup at the beginning of the file. If a file is less than or equal to 3/4 of the chosen bitrate, then it uses 3/4 of the bitrate of the file
 
 #### AudioBook Scripts
