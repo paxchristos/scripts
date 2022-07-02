@@ -1,3 +1,5 @@
+## Scratch script used for testing ideas
+
 for filename in *.mkv
 do
     echo $bitrate
