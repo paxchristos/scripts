@@ -13,7 +13,7 @@ ForEach ($directory in $directories)
 {
     #Changes to the each directory in turn 
     $rtfm = "$($directory.FullName)"    
-    cd "$rtfm"
+    Set-Location "$rtfm"
     
     ##DEBUG STATEMENT##
     ## Write-Host $rtfm ##

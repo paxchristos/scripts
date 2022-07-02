@@ -1,13 +1,17 @@
+## Removes video track from folder of videos, leaves audio and subtitle tracks ##
+
+# remove brackets from file names #
+(Get-ChildItem -File -Recurse) | Rename-Item -NewName { $_.Name -replace "[\[\]]" }
+
+#Gets all MKV files in a folder 
 $mkv = Get-ChildItem *.mkv
-$counter = 1
+
+#Iterates through all mkv files in a folder remove videos
 foreach ($file in $mkv)
 {
-    echo "$file"
-    $filename = $file.name
+    Write-Host "$file"
     $wordsathome=[System.IO.Path]::GetFileNameWithoutExtension($file)
-    mkvmerge --output "$($counter).mka" -D "$file"
-    $counter++
-    rm split-"$wordsathome"-001.mkv
-    rm "$file"
-    mv "split-"$wordsathome"-002.mkv" "$filename"
+    $wordsathome = $wordsathome+".mka"
+    mkvmerge --output "$wordsathome" -D "$file"
+    Remove-Item "$file"
 }

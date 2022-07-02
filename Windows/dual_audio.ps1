@@ -1,16 +1,20 @@
 # Powershell
-# Merges video and audio track, assumes only 1 season
-$mkv = Get-ChildItem *.mkv
-$counter=1
+# Merges video and audio track
+# removes brackets
+(Get-ChildItem -File -Recurse) | Rename-Item -NewName { $_.Name -replace "[\[\]]" }
 
+#Gets all MKV Files
+$mkv = Get-ChildItem *.mkv
+
+#Iterates thru each MKV file matching mkv file with mka containing audio and subtitle track
 foreach ($file in $mkv)
 {
-    echo "$file"
-    $tempname = "s01e$($counter).mkv"
-    $wordsathome = [System.IO.Path]::GetFileNameWithoutExtension($file)
+    $tempname = [System.IO.Path]::GetFileNameWithoutExtension($file)
+    $original = $tempname+".mkv"
     $mkaname = $wordsathome+".mka"
     mkvmerge.exe --output "$tempname" "$file" "$mkaname"
-    remove-item "$($counter).mka"
+    remove-item "$mkaname"
     remove-item "$file"
-    move-item "$tempname" "$($wordsathome).mkv"
+    rename-item "$tempname" "$original"
+    Write-Host "$original merged into dual audio"
 }
