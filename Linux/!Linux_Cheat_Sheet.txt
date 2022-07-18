@@ -1,0 +1,21 @@
+LIST ALL NON h265 FILES:
+find -name \*.mkv -exec ffprobe -v quiet -show_streams -show_format -of json {} \; | jq -c '.format.filename as $path | .streams[]? | select(.codec_type=="video" and .codec_name!="hevc") | {codec: .codec_name, path: $path}' >> not_h265
+
+LIST ALL EXTENSIONS
+find . -type f | sed -n 's/..*\.//p' | sort | uniq -c
+
+FIND FILE W/ EXTENSION AND COPY TO DIFFERENT FILE
+find . -name \*.MPG -exec cp -v {} /mnt/8tb/Game_Installs/PC_Games/xfer/Transcode/ \;
+
+COMPARE FOLDERS IGNORING EXTENSIONS
+diff <(ls -1 /home/server/Videos/ | sed 's/\.[a-z]*$//g') <( ls -1 /mnt/8tb/Game_Installs/PC_Games/xfer/Transcode/ | sed 's/\.[a-z]*$//g')
+
+
+LIST OF FILE EXTENSIONS IN ANIME
+    153 avi
+     48 AVI
+  21806 mkv
+    412 mp4
+      3 MP4
+     21 MPG
+     25 wmv

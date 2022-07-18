@@ -5,9 +5,11 @@
 ## removing brackets from directories and file names (used in mp3tag automatic renaming) ##
 (Get-ChildItem -Directory -Recurse) | Rename-Item -NewName { $_.Name -replace "[\[\]]" }
 (Get-ChildItem -File -Recurse) | Rename-Item -NewName { $_.Name -replace "[\[\]]" }
-
-## Collects all directories and iterates through them.
+#Variables Used
 #$gathering   = "C:\temp"
+$workingDir = Get-Location | Select-Object -ExpandProperty path
+## Collects all directories and iterates through them.
+
 $directories = Get-ChildItem -Recurse -Directory 
 ForEach ($directory in $directories)
 {
@@ -51,6 +53,8 @@ ForEach ($directory in $directories)
         #move-item $newname $gathering
         Remove-Item *.mp3 
     }
+    #Goes back to original Directory
+    Set-Location $workingDir
 }
 
 <#Other AudioBook Tools #>
