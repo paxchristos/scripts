@@ -5,7 +5,7 @@ foreach ($file in $mkv)
 	$filename = [io.path]::GetFileNameWithoutExtension($file.name)
 	$filename = $filename + "-ac3.mkv" 
 	$fullname = $file.name
-	ffmpeg -i $file.name -map 0 -c:v copy -c:s copy -c:a ac3 $filename
+	ffmpeg -i $file.name -map 0 -c:v copy -c:s srt -c:a ac3 $filename
 	remove-item $fullname
 	rename-item $filename $fullname
 }
