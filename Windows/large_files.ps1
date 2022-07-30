@@ -4,6 +4,17 @@
 $filename = "C:\temp\big_files.txt"
 $tempname = "C:\temp\big_files"
 
+#Checks for the file, if it exists deletes then creates it
+if (Test-Path -Path $filename -PathType Leaf)
+{
+	Remove-Item $filename
+    New-Item -path $filename -ItemType File
+}
+else
+{
+	New-Item -path $filename -ItemType file
+}
+
 ##Actual script part
 #Gets all the files in every subfolder then pipes (|) the response into checking if anything is greater than (-gt) 1000mb then pipes (|) the result into a text file (located @ $filename)
 Get-ChildItem *.* -Recurse -File | Where-Object { $_.Length -gt 1gb}  | add-content $filename

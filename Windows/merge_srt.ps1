@@ -11,15 +11,15 @@ foreach ($file in $mkv)
     if (Test-Path -Path $srtname)
     {
         mkvmerge -o "$tempname" "$filename" "$srtname"
-        Rename-Item -Path "$file"     -NewName "$unmerged"
+        Remove-Item -Path "$file"
+        Remove-Item -Path "$srtname"
         Rename-Item -Path "$tempname" -NewName "$filename"
-        Rename-Item -Path "$srtname"  -NewName "$oldsrt"
     }
     if (Test-Path -Path $langsrt)
     {
         mkvmerge -o "$tempname" "$filename" "$langsrt"
-        Rename-Item -Path "$file"     -NewName "$unmerged"
+        Remove-Item -Path "$file"
+        Remove-Item -Path "$langsrt"
         Rename-Item -Path "$tempname" -NewName "$filename"
-        Rename-Item -Path "$srtname"  -NewName "$oldsrt"
     }
 }
