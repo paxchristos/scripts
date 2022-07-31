@@ -2,19 +2,21 @@
 ##$original = get-location | select-object -expandproperty Path; $directories = Get-ChildItem -Directory -Recurse | Select-Object -expandproperty FullName; foreach ($directory in $directories) { cd "$directory"; $videos = Get-ChildItem *.mkv; foreach ($file in $videos) { $bitrate = MediaInfo.exe --Inform=General`;%OverallBitRate% $file; $bitrate = [math]::round($bitrate/1024, 2); $output = "$file has a bitrate of $bitrate KB/s"; add-content -Path $original\all_bitrates.txt -Value "$output"} cd $original}
 
 ##Original path for use throughout
-$original = get-location | select-object -expandproperty Path
+$original   = get-location | select-object -expandproperty Path
+$mb         = 1048576
+$kb         = 1024
 ##output for all the bitrates it pulls 
 $destination = "$original\all_bitrates.txt"
 
 ##Tests for the file, if it doesn't exist 
-if (Test-Path -Path $filename -PathType Leaf)
+if (Test-Path -Path $destination -PathType Leaf)
 {
-	Remove-Item $filename
-    New-Item -path $filename -ItemType File
+	Remove-Item $destination
+    [void](New-Item -path $destination -ItemType File)
 }
 else
 {
-	New-Item -path $filename -ItemType file
+	[void](New-Item -path $destination -ItemType file)
 }
 
 #Gets all the sub-directories and stores it an array using only the Full Path
@@ -32,9 +34,20 @@ foreach ($directory in $directories)
     foreach ($file in $videos)
     {
         #Variable pulls the bitrate from the file rounds it from bits/sec and converts it to kilobits/sec
+        $outputFile = Split-Path $file -leaf
+        $bits = "b/s"
         $bitrate = MediaInfo.exe --Inform=Video`;%BitRate% $file
-        $bitrate = [math]::round($bitrate/1024, 0)
-        $output = "$file has a bitrate of $bitrate KB/s"
+        if (($bitrate -ge $kb) -and ($bitrate -lt $mb))
+        {
+            $bitrate = [math]::round($bitrate/$kb, 2)
+            $bits = "KB/s"
+        }
+        if ($bitrate -ge $mb)
+        {
+            $bitrate = [math]::round($bitrate/$mb, 2)
+            $bits = "MB/s"
+        }
+        $output = "$outputFile has a bitrate of $bitrate $bits"
         add-content -Path "$destination" -Value "$output"
     } 
     Set-Location "$original"
