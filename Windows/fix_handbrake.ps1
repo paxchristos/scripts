@@ -13,6 +13,8 @@ foreach ($directory in $directories)
     ##If there are any mkv files, it iterates thorugh them fixing the tags
     foreach ($file in $videos) 
     {
+        $outputFile = Split-Path $file -leaf
+        write-host "Working on $outputFile"
         mkvpropedit --add-track-statistics-tags "$file"
     }
     ##Goes back to the original directory and starts 
