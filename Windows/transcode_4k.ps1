@@ -45,8 +45,6 @@ foreach ($directory in $directories)
 		$tempname = [io.path]::GetFileNameWithoutExtension($file.name)
 		##adds a "unique" addition to the end of transcoded file
 		$tempname = $tempname+"-remux.mkv"
-		##creates a variable for the renamed file
-		$oldname  = $file.name+".old"
 		##holds the original filename in a variable
 		$original = $file.name
 
@@ -72,7 +70,7 @@ foreach ($directory in $directories)
 		HandBrakeCLI.exe -i "$file" -o "$tempname" --format="$format" --encoder="$vencoder" --vb=$vbr --encoder-preset=slowest --two-pass --vfr --audio-lang-list="$langs" --all-audio --aencoder="$aencoder" --no-loose-crop --subtitle-lang-list="$langs" --all-subtitles --crop 0:0:0:0 --color-matrix="$nohdr" --mixdown="$surround"
 
 		##Renames the original final to filename.mkv.old
-		Rename-Item "$file" "$oldname"
+		Remove-Item "$file"
 		##Renames the new transcoded file into the original filename
     	rename-Item "$tempname" "$original"
 		##Fixes broken tags from handbrake
