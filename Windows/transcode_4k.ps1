@@ -57,6 +57,7 @@ foreach ($directory in $directories)
 		##--vb					= the video bitrate, match $vbr
 		##--encoder-preset		= slowest to make both the best quality and smallest file size
 		##--two-pass			= using two pass encoding instead of one pass for best file quality
+		##--turbo				= improved first pass speed
 		##--vfr					= using a variable frame rate to preserve the source timing
 		##--audio-lang-list		= isolating which audio tracks to keep, in this case, english, japanese and russian
 		##--all-audio			= all audio tracks mentioned in --audio-lang-list are kept in the new transcoded video
@@ -67,7 +68,7 @@ foreach ($directory in $directories)
 		##--crop 0:0:0:0		= disables any automatic crop by using the pixel count 0:0:0:0
 		##--color-matrix		= sets the color matrix (hdr to sdr tonemapping)
 		##--mixdown				= sets the surround sound settings. 
-		HandBrakeCLI.exe -i "$file" -o "$tempname" --format="$format" --encoder="$vencoder" --vb=$vbr --encoder-preset=slowest --two-pass --vfr --audio-lang-list="$langs" --all-audio --aencoder="$aencoder" --no-loose-crop --subtitle-lang-list="$langs" --all-subtitles --crop 0:0:0:0 --color-matrix="$nohdr" --mixdown="$surround"
+		HandBrakeCLI.exe -i "$file" -o "$tempname" --format="$format" --encoder="$vencoder" --vb=$vbr --encoder-preset=slowest --two-pass --turbo --vfr --audio-lang-list="$langs" --all-audio --aencoder="$aencoder" --no-loose-crop --subtitle-lang-list="$langs" --all-subtitles --crop 0:0:0:0 --color-matrix="$nohdr" --mixdown="$surround"
 
 		##Renames the original final to filename.mkv.old
 		Remove-Item "$file"
