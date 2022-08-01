@@ -1,0 +1,2 @@
+<# One line using an existing text file to fix handbrake issues. (No longer needed, set as one line to deal with problems.)
+$original = get-location | select-object -expandproperty Path; $mpegs = Get-Content -Path "$original\mpeg4.txt"; foreach ($file in $mpegs) { $actualFile = Get-ChildItem $file; $folder = Split-Path -Path $actualFile; Set-Location $folder; mkvpropedit.exe --add-track-statistics-tags $actualFile; Set-Location $original}#>
