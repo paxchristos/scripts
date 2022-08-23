@@ -1,6 +1,5 @@
 
 $original   = get-location | select-object -expandproperty Path
-$holding    = "Y:\sharing\temp\mpegs"
 $mpegs = Get-Content -Path "$original\mpeg4.txt"
 
 foreach ($file in $mpegs)

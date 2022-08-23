@@ -4,7 +4,7 @@
 $mkv = Get-ChildItem *.mkv -Recurse -File
 ## idea
 #$mkv = [System.IO.Directory]::EnumerateFiles($pwd, '*.*', 'AllDirectories')
-$hevc = "HEVC"
+$format = "FLAC"
 $filename = "C:\temp\not_hevc.txt"
 $tempname = "C:\temp\not_hevc"
 
@@ -23,7 +23,7 @@ else
 foreach ($file in $mkv)
 {
     #pulls the format using media info
-    $format = mediainfo.exe --Inform="Video;%Format%" "$file"
+    $format = mediainfo.exe --Inform="Audio;%Format%" "$file"
 
     ##DEBUG STATEMENTS##
     #Write-host $file

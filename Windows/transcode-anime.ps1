@@ -32,7 +32,7 @@ if ($null -ne $Matroska)
         ## Variables in loop
         Write-Output $file.name
         $tempname = [io.path]::GetFileNameWithoutExtension($file.name)
-        $tempname = tempname+"-remux.mkv"
+        $tempname = $tempname+"-remux.mkv"
         $original = $file.name
         $bitrate    = 0
         $temp1      = [math]::Round((mediainfo.exe --inform="General;%OverallBitRate%" $file.Name) / 1024,2)
