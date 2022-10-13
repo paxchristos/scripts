@@ -12,9 +12,16 @@ foreach ($file in $mkv)
     $tempname = [System.IO.Path]::GetFileNameWithoutExtension($file)
     $original = $tempname+".mkv"
     $mkaname = $tempname+".mka"
-    mkvmerge.exe --output "$tempname" "$file" "$mkaname"
-    remove-item "$mkaname"
-    remove-item "$file"
-    rename-item "$tempname" "$original"
-    Write-Host "$original merged into dual audio"
+    if (Test-Path $mkaname -PathType Leaf)
+    {
+        mkvmerge.exe --output "$tempname" "$file" "$mkaname"
+        remove-item "$mkaname"
+        remove-item "$file"
+        rename-item "$tempname" "$original"
+        Write-Host "$original merged into dual audio"
+    }
+    else
+    {
+        Write-host "Unable to merge $original, audio file doesn't exist"    
+    }
 }
