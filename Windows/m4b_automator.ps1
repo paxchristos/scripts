@@ -44,19 +44,23 @@ Function Get-MP3MetaData
     {
     }
 }
-(Get-ChildItem -Directory -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-]+" }
-
+$ErrorActionPreference= 'silentlycontinue'
+(Get-ChildItem -Directory -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_]+" }
+$ErrorActionPreference= 'continue'
 $directories = Get-ChildItem -Directory -Recurse | Select-Object -ExpandProperty FullName
 $originaldirectory = Get-Location | Select-Object -ExpandProperty Path
 $automator_log = $originaldirectory + "\automator.log"
+$beginning = Get-Date -Format "dd/mm/yyyy"
 if (Test-Path -Path $automator_log -PathType Leaf)
 {
-    Remove-Item $automator_log
-    [void](New-Item -Path $automator_log -ItemType File)
+    Add-Content -Path $automator_log -Value "---***---"
+    Add-Content -Path $automator_log -Value "Started new automation on $($beginning)"
 }
 else
 {
     [void](New-Item -Path $automator_log -ItemType file)
+    Add-Content -Path $automator_log -Value "---***---"
+    Add-Content -Path $automator_log -Value "Started new automation on $($beginning)"
 }
 
 foreach ($directory in $directories)
@@ -324,7 +328,7 @@ foreach ($directory in $directories)
                 Add-Content -Path $track_list -Value "file '$($current_directory)\$($file.Name)'"
             }
             Add-Content -Path $automator_log -Value "Grabbed metadata for $($Directory)"
-            ffmpeg -f concat -safe 0 -i "$track_list" -c:a aac -b:a "$bitrate" -vn "$temp_file_name"
+            ffmpeg -f concat -safe 0 -i "$track_list" -c:a aac -vn "$temp_file_name"
             Add-Content -Path $automator_log -Value "converted all wma for $($Directory) to m4a"
         }
         Get-Content $temp_metadata_file | Out-File -Encoding ascii $metadata_file

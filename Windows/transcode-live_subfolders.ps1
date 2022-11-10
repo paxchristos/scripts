@@ -9,18 +9,26 @@ $sdbr       = 500
 $maxfhdbr   = 2000
 $maxhdbr    = 1334
 $maxsdbr    = 666
+$sdh        = 480
+$sdw        = 640
 $HEVC       = "HEVC"
 $encoder    = "nvenc_h265"
 $langlist   = 'eng,jpn,rus,und'
 
+#renames files and folder removing special characters
+$ErrorActionPreference= 'silentlycontinue'
+(Get-ChildItem -Directory -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_/(/)]+" }
+(Get-ChildItem -File -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_/(/)]+" }
+$ErrorActionPreference= 'continue'
 $directories        = Get-ChildItem -Directory -Recurse | Select-Object -ExpandProperty FullName
 $originaldirectory  = Get-Location | Select-Object -ExpandProperty Path
-$logFile            = $originaldirectory + "\transcode.log"
-$oldLog             = $logfile+".old"
+$logFile            = $originaldirectory + "\remux.log"
+$currentTime        = Get-Date -Format "MM/dd/yyyy hh:mm"
 
 if (Test-Path -Path $logFile -PathType Leaf)
 {
-    rename-item $logfile $oldLog
+    Add-Content -Path $logFile -Value ---***---
+    Add-Content -Path $logFile -Value "Stated new batch of remuxes on $($currentTime)"
 }
 else
 {
@@ -63,14 +71,16 @@ foreach ($directory in $directories)
                 $bitrate = $temp2
             }
             $format = mediainfo.exe --Inform="Video;%Format%" $file.name
-            $vert = mediainfo.exe --Inform="Video;%Height%" $file.name
+            $vert = mediainfo.exe --Inform="Video;%Height%" $file.Name
             $hort = mediainfo.exe --Inform="Video;%Width%" $file.name
+            $vert = [int]$vert
+            $hort = [int]$hort
             $tempbr = ($bitrate / 4 * 3)
 
             if ( $format = $HEVC )
             {
                 Write-Output "HEVC Codec"
-                if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+                if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
                 {
                     Write-Output "1080p Resolution"
                     if ( $bitrate -gt $maxfhdbr )
@@ -88,7 +98,7 @@ foreach ($directory in $directories)
                         Add-Content -Path $logFile -Value "$original is below expected bitrate at $Bitrate"
                     }
                 }
-                elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+                elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
                 {
                     Write-Output "720p Resolution"
                     if ( $bitrate -gt $maxhdbr )
@@ -148,7 +158,7 @@ foreach ($directory in $directories)
                         Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
                     }
                 }   
-                elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+                elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
                 {
                     Write-Output "720p Resolution"
                     if ( $bitrate -gt $maxhdbr )
@@ -218,12 +228,14 @@ foreach ($directory in $directories)
             $format = mediainfo.exe --Inform="Video;%Format%" $file.name
             $vert = mediainfo.exe --Inform="Video;%Height%" $file.name
             $hort = mediainfo.exe --Inform="Video;%Width%" $file.name
+            $vert = [int]$vert
+            $hort = [int]$hort
             $tempbr = ($bitrate / 4 * 3)
 
             if ( $format = $HEVC )
             {   
                 Write-Output "HEVC Codec"
-                if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+                if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
                 {
                     Write-Output "1080p Resolution"
                     if ( $bitrate -gt $maxfhdbr )
@@ -241,7 +253,7 @@ foreach ($directory in $directories)
                         Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
                     }
                 }
-                elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+                elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
                 {
                     Write-Output "720p Resolution"
                     if ( $bitrate -gt $maxhdbr )
@@ -281,7 +293,7 @@ foreach ($directory in $directories)
             else
             {
                 Write-Output "Not HEVC Codec"
-                if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+                if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
                 {
                     Write-Output "1080p Resolution"
                     if ( $bitrate -gt $maxfhdbr )
@@ -299,7 +311,7 @@ foreach ($directory in $directories)
                         Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
                     }
                 }
-                elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+                elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
                 {
                     Write-Output "720p Resolution"
                     if ( $bitrate -gt $maxhdbr )
@@ -364,9 +376,11 @@ foreach ($directory in $directories)
             }
             $vert = mediainfo.exe --Inform="Video;%Height%" $file.name
             $hort = mediainfo.exe --Inform="Video;%Width%" $file.name
+            $vert = [int]$vert
+            $hort = [int]$hort
             $tempbr = ($bitrate / 4 * 3)
 
-            if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+            if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
             {
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
@@ -384,7 +398,7 @@ foreach ($directory in $directories)
                     Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
                 }
             }
-            elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+            elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
             {
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
@@ -449,9 +463,11 @@ foreach ($directory in $directories)
             }
             $vert = mediainfo.exe --Inform="Video;%Height%" $file.name
             $hort = mediainfo.exe --Inform="Video;%Width%" $file.name
+            $vert = [int]$vert
+            $hort = [int]$hort
             $tempbr = ($bitrate / 4 * 3)
 
-            if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+            if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
             {
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
@@ -469,7 +485,7 @@ foreach ($directory in $directories)
                     Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
                 }
             }
-            elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+            elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
             {
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
@@ -532,11 +548,13 @@ foreach ($directory in $directories)
             }
             $vert = mediainfo.exe --Inform="Video;%Height%" $file.name
             $hort = mediainfo.exe --Inform="Video;%Width%" $file.name
+            $vert = [int]$vert
+            $hort = [int]$hort
             $tempbr = ($bitrate / 4 * 3)
             $tempname = [io.path]::GetFileNameWithoutExtension("$file")
             $tempname = "$tempname" + ".mkv"
 
-            if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+            if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
             {
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
@@ -554,7 +572,7 @@ foreach ($directory in $directories)
                     Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
                 }
             }
-            elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+            elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
             {
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
@@ -617,11 +635,13 @@ foreach ($directory in $directories)
             }
             $vert = mediainfo.exe --Inform="Video;%Height%" $file.name
             $hort = mediainfo.exe --Inform="Video;%Width%" $file.name
+            $vert = [int]$vert
+            $hort = [int]$hort
             $tempbr = ($bitrate / 4 * 3)
             $tempname = [io.path]::GetFileNameWithoutExtension("$file")
             $tempname = "$tempname" + ".mkv"
 
-            if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+            if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
             {
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
@@ -639,7 +659,7 @@ foreach ($directory in $directories)
                     Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
                 }
             }
-            elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+            elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
             {
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
@@ -701,11 +721,13 @@ if ($null -ne $Mpeg2)
         }
         $vert = mediainfo.exe --Inform="Video;%Height%" $file.name
         $hort = mediainfo.exe --Inform="Video;%Width%" $file.name
+        $vert = [int]$vert
+        $hort = [int]$hort
         $tempbr = ($bitrate / 4 * 3)
         $tempname = [io.path]::GetFileNameWithoutExtension("$file")
         $tempname = "$tempname" + ".mkv"
 
-        if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+        if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
         {
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
@@ -723,7 +745,7 @@ if ($null -ne $Mpeg2)
                 Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
             }
         }
-        elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+        elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
         {
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
@@ -785,11 +807,13 @@ if ($null -ne $Mpeg2)
             }
             $vert = mediainfo.exe --Inform="Video;%Height%" $file.name
             $hort = mediainfo.exe --Inform="Video;%Width%" $file.name
+            $vert = [int]$vert
+            $hort = [int]$hort
             $tempbr = ($bitrate / 4 * 3)
             $tempname = [io.path]::GetFileNameWithoutExtension("$file")
             $tempname = "$tempname" + ".mkv"
 
-            if (( $vert -eq $hdh ) -or ( $hort -eq $hdw ))
+            if ((( $vert -gt $shdh ) -and ( $vert -le $hdh )) -or(($hort -gt $shdw) -and ( $hort -eq $hdw )))
             {
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
@@ -807,7 +831,7 @@ if ($null -ne $Mpeg2)
                     Add-Content -Path $logFile -Value "$original has been transcoded from $format to HEVC and from $bitrate to $hdbr"
                 }
             }
-            elseif (( $vert -eq $shdh ) -or ( $hort -eq $shdw ))
+            elseif (($vert -gt $sdh) -and  ( $vert -lt $hdh ) -or (( $hort -gt $sdw) -and ( $hort -lt $hdh )))
             {
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
