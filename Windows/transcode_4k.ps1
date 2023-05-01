@@ -31,7 +31,7 @@ $fallAudio		= "eac3"
 ### Unused Variables ###
 #$nohdr			= "709"#>
 
-$json 			= "C:\Users\peter\Documents\scripts\Windows\4k.json"
+$json 			= "T:\Documents\scripts\Windows\4k.json"
 
 ##Collects all directories
 $directories = Get-ChildItem -Directory -Recurse | Select-Object -ExpandProperty FullName
