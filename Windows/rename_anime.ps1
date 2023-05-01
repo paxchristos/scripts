@@ -16,7 +16,17 @@ ForEach ($file in $files)
         $seasonNumberString = "{0:D2}" -f $seasonNumber
         $newFileName = $newFileName -replace $regex, "- S${seasonNumberString}E${episodeNumberString}"
     }
-
+    else
+    {
+        $regex = '(.*) - (\d+)'
+        if ($newFileName -match $regex)
+        {
+            $seriesName = $Matches[1]
+            $episodeNumber = [int]$Matches[2]
+            $episodeNumberString = "{0:D2}" -f $episodeNumber
+            $newFileName = "$seriesName - S01${episodeNumberString}"
+        }
+    }
     foreach ($translation in $translations)
     {
         if ($newFileName.Contains($translation.OldName))
