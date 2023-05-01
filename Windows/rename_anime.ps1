@@ -24,7 +24,7 @@ ForEach ($file in $files)
             $seriesName = $Matches[1]
             $episodeNumber = [int]$Matches[2]
             $episodeNumberString = "{0:D2}" -f $episodeNumber
-            $newFileName = "$seriesName - S01${episodeNumberString}"
+            $newFileName = "$seriesName - S01${episodeNumberString}.mkv"
         }
     }
     foreach ($translation in $translations)
