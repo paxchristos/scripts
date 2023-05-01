@@ -14,6 +14,7 @@ foreach ($directory in $directories)
         $srtname  = $tempname+".srt"
         $langsrt  = $tempname+".en.srt"
         $extralangsrt = $tempname+".eng.srt"
+        $assname  = $tempname+".ass"
         if (Test-Path -Path $srtname -PathType Leaf)
         {
             mkvmerge -o "$tempname" "$filename" "$srtname"
@@ -33,6 +34,13 @@ foreach ($directory in $directories)
             mkvmerge -o "$tempname" "$filename" "$extralangsrt"
             Remove-Item -Path "$file"
             Remove-Item -Path "$extralangsrt"
+            Rename-Item -Path "$tempname" -NewName "$filename"
+        }
+        if (Test-Path -Path $assname -PathType Leaf)
+        {
+            mkvmerge -o "$tempname" "$filename" "$assname"
+            Remove-Item -Path "$file"
+            Remove-Item -Path "$assname"
             Rename-Item -Path "$tempname" -NewName "$filename"
         }
     }
