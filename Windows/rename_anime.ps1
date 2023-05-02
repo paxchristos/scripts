@@ -7,6 +7,7 @@ ForEach ($file in $files)
     $fileName = $file.Name
     $newFileName = $fileName -replace '\[.*?\]|\(.*?\)', ''
     $newFileName = $newFileName -replace '\s{2,}', ''
+    $newFileName = $newFileName.TrimStart()
     $regex = 'S(\d+) -\s(\d+)'
     if ($newFileName -match $regex)
     {
@@ -18,7 +19,7 @@ ForEach ($file in $files)
     }
     else
     {
-        $regex = '(.*) - (\d+)'
+        $regex = '^(.*) - (\d+)'
         if ($newFileName -match $regex)
         {
             $seriesName = $Matches[1]
@@ -34,5 +35,5 @@ ForEach ($file in $files)
             $newFileName = $newFileName -replace [regex]::Escape($translation.OldName), $translation.NewName
         }
     }
-    Rename-Item -Path $filePath -NewName $newFileName
+    Rename-Item -LiteralPath $filePath -NewName $newFileName
 }
