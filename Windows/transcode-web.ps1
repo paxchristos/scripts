@@ -58,14 +58,14 @@ if ($null -ne $Matroska)
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
@@ -76,14 +76,14 @@ if ($null -ne $Matroska)
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
@@ -94,14 +94,14 @@ if ($null -ne $Matroska)
                 Write-Output "SD"
                 if ( $bitrate -gt $maxsdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
@@ -116,14 +116,14 @@ if ($null -ne $Matroska)
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3   --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
@@ -134,14 +134,14 @@ if ($null -ne $Matroska)
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
@@ -152,14 +152,14 @@ if ($null -ne $Matroska)
                 Write-Output "SD"
                 if ( $bitrate -gt $maxsdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
                     rename-Item "$tempname" "$original"
                     mkvpropedit --add-track-statistics-tags "$original"
@@ -205,13 +205,13 @@ if ($null -ne $Mpeg4)
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
@@ -221,13 +221,13 @@ if ($null -ne $Mpeg4)
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
@@ -237,13 +237,13 @@ if ($null -ne $Mpeg4)
                 Write-Output "SD"
                 if ( $bitrate -gt $maxsdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
@@ -257,13 +257,13 @@ if ($null -ne $Mpeg4)
                 Write-Output "1080p Resolution"
                 if ( $bitrate -gt $maxfhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3   --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
@@ -273,13 +273,13 @@ if ($null -ne $Mpeg4)
                 Write-Output "720p Resolution"
                 if ( $bitrate -gt $maxhdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                     Remove-Item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
@@ -289,13 +289,13 @@ if ($null -ne $Mpeg4)
                 Write-Output "SD"
                 if ( $bitrate -gt $maxsdbr )
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
                 else
                 {
-                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                    HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                     remove-item "$file"
                     mkvpropedit --add-track-statistics-tags "$tempname"
                 }
@@ -336,13 +336,13 @@ if ($null -ne $WindowsMedia)
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -352,13 +352,13 @@ if ($null -ne $WindowsMedia)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -368,13 +368,13 @@ if ($null -ne $WindowsMedia)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -415,13 +415,13 @@ if ($null -ne $AudioVideo)
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -431,13 +431,13 @@ if ($null -ne $AudioVideo)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -447,13 +447,13 @@ if ($null -ne $AudioVideo)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -494,13 +494,13 @@ if ($null -ne $divx)
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -510,13 +510,13 @@ if ($null -ne $divx)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -526,13 +526,13 @@ if ($null -ne $divx)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -573,13 +573,13 @@ if ($null -ne $Mpeg)
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -589,13 +589,13 @@ if ($null -ne $Mpeg)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -605,13 +605,13 @@ if ($null -ne $Mpeg)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -652,13 +652,13 @@ if ($null -ne $Mpeg4v)
             Write-Output "1080p Resolution"
             if ( $bitrate -gt $maxfhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3   --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$hdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3   --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -668,13 +668,13 @@ if ($null -ne $Mpeg4v)
             Write-Output "720p Resolution"
             if ( $bitrate -gt $maxhdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$shdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles --crop 0:0:0:0
                 Remove-Item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
@@ -684,13 +684,13 @@ if ($null -ne $Mpeg4v)
             Write-Output "SD"
             if ( $bitrate -gt $maxsdbr )
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$sdbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }
             else
             {
-                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --no-loose-crop --subtitle-lang-list eng,jpn,rus,und --all-subtitles
+                HandBrakeCLI.exe -i "$file" -o "$tempname" -e "$encoder" -b "$tempbr" --no-two-pass --all-audio --aencoder ac3 --audio-copy-mask ac3 --mixdown stereo --subtitle-lang-list eng,jpn,rus,und --all-subtitles
                 remove-item "$file"
                 mkvpropedit --add-track-statistics-tags "$tempname"
             }

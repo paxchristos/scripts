@@ -10,7 +10,7 @@ foreach ($file in $mkv)
     Write-Host "$file"
     $filename = $file.name
     $wordsathome=[System.IO.Path]::GetFileNameWithoutExtension($file)
-    mkvmerge --output "split-$wordsathome.mkv" --split timestamps:00:00:07.007,01:00:00 "$file"
+    mkvmerge --output "split-$wordsathome.mkv" --split timestamps:00:00:07.007,05:00:00 "$file"
     remove-item "split-$wordsathome-001.mkv"
     remove-item "$file"
     rename-item "split-$wordsathome-002.mkv" "$filename"
