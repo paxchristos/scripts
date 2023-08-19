@@ -5,7 +5,7 @@ ForEach ($file in $files)
 {
     $filePath = $file.FullName
     $fileName = $file.Name
-    $newFileName = $fileName -replace '\[.*?\]|\(.*?\)', ''
+    $newFileName = $fileName -replace '\[.*?\]', '' #'\[.*?\]|\(.*?\)', ''
     $newFileName = $newFileName -replace '\s{2,}', ''
     $newFileName = $newFileName.TrimStart()
     foreach ($translation in $translations)
