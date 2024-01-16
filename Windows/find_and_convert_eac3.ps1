@@ -73,7 +73,7 @@ foreach ($directory in $directories)
         }
     }
     # Create .skip_ac3 file in the directory to mark it as processed
-    New-Item -Path $skipFile -ItemType File
+    [void](New-Item -Path $skipFile -ItemType File)
 
     Set-Location $originaldirectory
 }
