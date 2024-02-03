@@ -4,6 +4,10 @@ $logFile = "C:\temp\logs\remux_from_eac3.log"
 $skipFile = ".skip_ac3"
 $currentTime = Get-Date -Format "MM/dd/yyyy hh:mm"
 
+##cleanup file & folder names so powershell doesn't throw a fit
+(Get-ChildItem -Directory -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_/(/)]+" }
+(Get-ChildItem -File -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_/(/)]+" }
+
 if (Test-Path -Path $logFile -PathType Leaf)
 {
     Add-Content -Path $logFile -Value ---***---
