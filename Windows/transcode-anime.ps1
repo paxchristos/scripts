@@ -13,11 +13,11 @@ $hdw = 1920
 $shdh = 720
 $shdw = 1280
 $hdbr = 1500
-$shdbr = 1000
-$sdbr = 500
+$shdbr = 1500
+$sdbr = 1500
 $maxfhdbr = 2000
-$maxhdbr = 1334
-$maxsdbr = 666
+$maxhdbr = 2000
+$maxsdbr = 2000
 $HEVC = "HEVC"
 $encoder = "nvenc_h265"
 

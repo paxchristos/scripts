@@ -5,8 +5,8 @@ $skipFile = ".skip_ac3"
 $currentTime = Get-Date -Format "MM/dd/yyyy hh:mm"
 
 ##cleanup file & folder names so powershell doesn't throw a fit
-(Get-ChildItem -Directory -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_/(/)]+" }
-(Get-ChildItem -File -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_/(/)]+" }
+(Get-ChildItem -Directory -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_/(/)]+" } -ErrorAction SilentlyContinue
+(Get-ChildItem -File -Recurse) | Rename-Item -NewName { $_.Name -replace "[^\p{L}\p{Nd}/./\s/-/_/(/)]+" } -ErrorAction SilentlyContinue
 
 if (Test-Path -Path $logFile -PathType Leaf)
 {
@@ -33,8 +33,10 @@ foreach ($directory in $directories)
 
     foreach ($mkvFile in $mkvFiles)
     {
+        $fullName = $mkvFile.FullName
+        $fullName
         # Get information about the audio tracks using mediainfocli
-        $mediaInfo = & mediainfo --Inform="Audio;%Format%`t%Channels%`t%BitRate%" $mkvFile.FullName
+        $mediaInfo = & mediainfo --Inform="Audio;%Format%`t%Channels%`t%BitRate%" $fullName
 
         # Loop through each line of audio track information
         foreach ($audioInfo in $mediaInfo.Split("`n"))
@@ -50,28 +52,30 @@ foreach ($directory in $directories)
                 try
                 {
                     # Construct the output file name (assuming you want to append _converted to the original file name)
-                    $outputFile = [System.IO.Path]::ChangeExtension($mkvFile.FullName, "ac3")
-                    $tempFile = $mkvFile.FullName -replace ".mkv", "_converted.mkv"
-
+                    $outputFile = [System.IO.Path]::ChangeExtension($fullName, "ac3")
+                    $tempFile = $fullName -replace ".mkv", "_converted.mkv"
+                    $eacToArgs = '"' + $fullName + '" ' + '"' + $outputFile + '" -downStereo -192'
+                    #$eacToArgs
                     # Use eac3to to extract and convert the audio track to AC3
-                    & eac3to $mkvFile.FullName $outputFile -downStereo -192
+                    Start-Process eac3to -ArgumentList $eacToArgs -ErrorAction Stop -Wait -NoNewWindow
 
+                    $mkvmergeArgs = ' -o "' + $tempFile + '" --track-name 0:English --default-track 0:true --language 0:en "' + $outputFile + '" --language 0:en --default-track 0:false "' + $fullName + '"'
                     # Use ffmpeg to set the bitrate of the AC3 file
-                    & mkvmerge -o $tempFile --track-name 0:English --default-track 0:true --language 0:en $outputFile --language 0:en --default-track 0:false $mkvFile.FullName
+                    Start-Process mkvmerge -ArgumentList $mkvmergeArgs -ErrorAction Stop -Wait -NoNewWindow
                     $to_delete = $true
                     Add-Content -Path $logFile -Value "$original has been remuxed from EAC3 to AC3 Stereo"
                 }
                 catch
                 {
-                    Write-host "Operation Failed for $($mkvFile.FullName)"
+                    Write-host "Operation Failed for $($fullName)"
                     $to_delete = $false
                 }
                 if ($to_delete)
                 {
                     # Optional: Remove the intermediate converted file
                     Remove-Item $outputFile
-                    Remove-Item -LiteralPath $mkvFile.FullName
-                    Rename-Item $tempFile $mkvFile.FullName
+                    Remove-Item -LiteralPath $fullName
+                    Rename-Item $tempFile $fullName
                 }
             }
         }
@@ -81,4 +85,4 @@ foreach ($directory in $directories)
 
     Set-Location $originaldirectory
 }
-
+    

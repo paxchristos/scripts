@@ -6,6 +6,8 @@ foreach ($file in $mkv)
     $unmerged = $filename+".old"
     $tempname = [io.path]::GetFileNameWithoutExtension($file.name)
     $srtname  = $tempname+".srt"
+    $idxname  = $tempname+".idx"
+    $subname  = $tempname+".sub"
     $assname  = $tempname+".ass"
     $langsrt  = $tempname+".en.srt"
     $oldsrt   = $srtname+".old"
@@ -15,6 +17,20 @@ foreach ($file in $mkv)
         mkvmerge -o "$tempname" "$filename" "$srtname"
         Remove-Item -Path "$file"
         Remove-Item -Path "$srtname"
+        Rename-Item -Path "$tempname" -NewName "$filename"
+    }
+    if (Test-Path -Path $idxname -PathType Leaf)
+    {
+        mkvmerge -o "$tempname" "$filename" "$idxname"
+        Remove-Item -Path "$file"
+        Remove-Item -Path "$idxname"
+        Rename-Item -Path "$tempname" -NewName "$filename"
+    }
+    if (Test-Path -Path $subname -PathType Leaf)
+    {
+        mkvmerge -o "$tempname" "$filename" "$subname"
+        Remove-Item -Path "$file"
+        Remove-Item -Path "$subname"
         Rename-Item -Path "$tempname" -NewName "$filename"
     }
     if (Test-Path -Path $assname -PathType Leaf)
