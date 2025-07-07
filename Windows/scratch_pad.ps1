@@ -55,3 +55,33 @@ yt https://www.youtube.com/playlist?list=PL4sbg6ng23C7EgaIlo2C3b5P2dAQHdNfZ; rem
 cat C:\Users\peter\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt | findstr /i twitter
 
 yt-dlp https://twitter.com/i/status/1711496189323952185 --username nielson.peter@gmail.com --password "this is my twitter password" -o 'Y:\sharing\Media\tv\Tucker on Twitter\tucker - s01e29.mp4'
+
+
+
+$directories = Get-ChildItem -Directory -Recurse | Select-Object -ExpandProperty FullName
+$original = Get-Location | Select-Object -ExpandProperty Path
+foreach ($directory in $directories) 
+{ 
+    Set-Location "$directory"; $name = Split-Path -Path (Get-Location) -Leaf
+    $subs = Get-ChildItem *.srt
+    foreach ($file in $subs)
+    {
+        if ($file.name -eq "2_English.srt")
+        {
+            <#get-childitem $file | Rename-Item -NewName {$file.BaseName.Replace("2_Eng","$name") + $file.Extension}#>
+            $file.BaseName
+            $file.Extension
+        } 
+        if ($file.name -eq "3_eng,SDH.srt")
+        {
+            get-childitem $file | Rename-Item -NewName {$file.BaseName.Replace("3_eng,SDH","$name.en") + $file.Extension}
+        }
+        if ($file.name -eq "4_English.srt")
+        {
+            Get-ChildItem $file | Rename-Item  -NewName {$file.BaseName.Replace("4_English","$name.eng") + $file.Extension}
+        }
+    }
+    Set-Location $original
+} 
+<#Get-ChildItem -recurse *.srt | Move-Item -Destination ..\#>
+$matching1 = "2_Eng.srt"; $matching2 = "3_eng.srt"; $directories = Get-ChildItem -Directory -Recurse | Select-Object -ExpandProperty FullName; $original = Get-Location | Select-Object -ExpandProperty Path; foreach ($directory in $directories) { Set-Location "$directory"; $name = Split-Path -Path (Get-Location) -Leaf; $subs = Get-ChildItem *.srt; foreach ($file in $subs) { if ($file.name -match $matching1) { get-childitem $file | Rename-Item -NewName {$file.BaseName.Replace($matching1,"$name") + $file.Extension}} if ($file.name -eq $matching2) { get-childitem $file | Rename-Item -NewName {$file.BaseName.Replace($matching2,"$name.en") + $file.Extension}}}Set-Location $original}; Get-ChildItem -recurse *.srt | Move-Item -Destination ..\
