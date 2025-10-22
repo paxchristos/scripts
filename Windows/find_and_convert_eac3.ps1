@@ -73,9 +73,16 @@ foreach ($directory in $directories)
                 if ($to_delete)
                 {
                     # Optional: Remove the intermediate converted file
-                    Remove-Item $outputFile
-                    Remove-Item -LiteralPath $fullName
-                    Rename-Item $tempFile $fullName
+                    if (Test-Path -Path $tempFile -PathType Leaf)
+                    {
+                        Remove-Item $outputFile
+                        Remove-Item -LiteralPath $fullName
+                        Rename-Item $tempFile $fullName
+                    }
+                    else
+                    {
+                        Write-Output "Failed to convert EAC3 to AC3 file, check term output for issue"
+                    }
                 }
             }
         }

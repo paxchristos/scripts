@@ -18,10 +18,32 @@ foreach ($directory in $directories)
     ##Changes directory to current working one
     Set-Location  "$directory"
     $mp4 = Get-ChildItem *.mp4
+    $avi = Get-ChildItem *.avi
+    $ts = Get-ChildItem *.ts
     ## DEBUG STATEMENT ##
     ##write-host $mp4.count##
 
     foreach ($file in $mp4)
+    {
+        Write-Host "$file"
+        $tempname = [System.IO.Path]::GetFileNameWithoutExtension($file)
+        $tempname = $tempname+".mkv"
+        mkvmerge -o "$tempname" "$file"
+        Remove-Item "$file"
+        Add-Content -Path $logFile -Value "Remuxed $($tempname) from MP4 to MKV"
+    }
+
+    foreach ($file in $avi)
+    {
+        Write-Host "$file"
+        $tempname = [System.IO.Path]::GetFileNameWithoutExtension($file)
+        $tempname = $tempname+".mkv"
+        mkvmerge -o "$tempname" "$file"
+        Remove-Item "$file"
+        Add-Content -Path $logFile -Value "Remuxed $($tempname) from MP4 to MKV"
+    }
+
+    foreach ($file in $ts)
     {
         Write-Host "$file"
         $tempname = [System.IO.Path]::GetFileNameWithoutExtension($file)

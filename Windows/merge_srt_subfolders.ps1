@@ -1,5 +1,5 @@
-$directories        = Get-ChildItem -Directory -Recurse | Select-Object -ExpandProperty FullName
-$originaldirectory  = Get-Location | Select-Object -ExpandProperty Path
+$directories = Get-ChildItem -Directory -Recurse | Select-Object -ExpandProperty FullName
+$originaldirectory = Get-Location | Select-Object -ExpandProperty Path
 
 foreach ($directory in $directories)
 {
@@ -11,10 +11,10 @@ foreach ($directory in $directories)
     {
         $filename = $file.name
         $tempname = [io.path]::GetFileNameWithoutExtension($file.name)
-        $srtname  = $tempname+".srt"
-        $langsrt  = $tempname+".en.srt"
-        $extralangsrt = $tempname+".eng.srt"
-        $assname  = $tempname+".ass"
+        $srtname = $tempname + ".srt"
+        $langsrt = $tempname + ".en.srt"
+        $extralangsrt = $tempname + ".eng.srt"
+        $assname = $tempname + ".ass"
         if (Test-Path -Path $srtname -PathType Leaf)
         {
             mkvmerge -o "$tempname" "$filename" "$srtname"
