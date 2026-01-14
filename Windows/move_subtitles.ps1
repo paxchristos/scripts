@@ -56,9 +56,9 @@ foreach ($subfolder in $wholeTree)
                 $newName = $null
                 switch ($file.Name)
                 {
-                    "2_English.srt" { $newName = "$folderName.en.srt" }
-                    "3_English.srt" { $newName = "$folderName.en1.srt" }
-                    "4_English.srt" { $newName = "$folderName.en2.srt" }
+                    "2_eng,English (forced).srt" { $newName = "$folderName.en.srt" }
+                    "3_eng,English (SDH).srt" { $newName = "$folderName.en1.srt" }
+                    "2_eng,English (SDH)" { $newName = "$folderName.en2.srt" }
                     "5_English.srt" { $newName = "$folderName.en3.srt" }
                     "6_English.srt" { $newName = "$folderName.en4.srt" }
                     default { continue }  # Skip if it doesn't match any case
