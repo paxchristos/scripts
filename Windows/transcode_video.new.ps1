@@ -46,7 +46,7 @@ if ($videoTranscode)
         "-map", "0:v:0",
         "-c:v", "hevc_nvenc",
         "-rc:v", "vbr",
-        "-b:v", "1500k",
+        "-b:v", "2000k",
         "-maxrate:v", "3000k",
         "-bufsize:v", "3000k"
     )
@@ -98,9 +98,9 @@ $outputPath = [System.IO.Path]::ChangeExtension($Full_Path, ".hevc.mkv")
 
 $ffmpegArgs = @(
     "-y",
-    "-i", "$Full_Path"
+    "-i", "`"$Full_Path`""
 ) + $videoArgs + $audioArgs + $miscArgs + @(
-    "$outputPath"
+    "`"$outputPath`""
 )
 
 
@@ -115,7 +115,7 @@ if (-not(Test-Path -Path $outputPath -PathType Leaf))
     $videoArgs = @(
         "-map", "0:v:0",
         "-c:v", "libx265",
-        "-b:v", "1500k",
+        "-b:v", "2000k",
         "-maxrate:v", "3000k",
         "-bufsize:v", "3000k",
         "-preset", "medium"
@@ -123,10 +123,17 @@ if (-not(Test-Path -Path $outputPath -PathType Leaf))
 
     $ffmpegArgs = @(
         "-y",
-        "-i", "$Full_Path"
+        "-i", "`"$Full_Path`""
     ) + $videoArgs + $audioArgs + $miscArgs + @(
-        "$outputPath"
+        "`"$outputPath`""
     )
 
     Start-Process ffmpeg -ArgumentList $ffmpegArgs -Wait -NoNewWindow
+}
+
+if (Test-Path -Path $outputPath -PathType Leaf)
+{
+    start-sleep -Seconds 1
+    Remove-Item $Full_Path -Force -Confirm:$false
+    Move-Item -LiteralPath $outputPath -Destination $Full_Path -Force
 }
