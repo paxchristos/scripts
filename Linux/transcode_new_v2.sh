@@ -3,12 +3,24 @@ set -euo pipefail
 
 INPUT="$1"
 
+case "$1" in
+    *.part)
+        echo "Skipping partial file: $1"
+        exit 0
+        ;;
+esac
+
+
 if [[ ! -f "$INPUT" ]]; then
-  echo "Input file not found"
+  echo "Input file not found: $INPUT"
   exit 1
 fi
 
-OUTPUT="${INPUT%.*}.hevc.mkv"
+DIR="$(dirname "$INPUT")"
+BASE="$(basename "$INPUT")"
+
+# Temp file MUST be in same filesystem for atomic replace
+TEMP="${DIR}/.${BASE}.sonarr-transcode.mkv"
 
 video_transcode=false
 
@@ -66,7 +78,6 @@ audio_args=()
 
 for line in "${audio_streams[@]}"; do
   IFS=',' read -r a_index a_codec a_channels a_bitrate <<< "$line"
-
   map_index=$((a_index - 1))
 
   audio_args+=(-map "0:a:$map_index")
@@ -93,22 +104,24 @@ misc_args=(
 )
 
 # ------------------------
-# RUN FFMPEG (GPU FIRST)
+# GPU TRANSCODE (TO TEMP)
 # ------------------------
 set +e
 ffmpeg -y -i "$INPUT" \
   "${video_args[@]}" \
   "${audio_args[@]}" \
   "${misc_args[@]}" \
-  "$OUTPUT"
+  "$TEMP"
 status=$?
 set -e
 
 # ------------------------
 # FALLBACK TO CPU IF GPU FAILS
 # ------------------------
-if [[ $status -ne 0 || ! -f "$OUTPUT" ]]; then
+if [[ $status -ne 0 || ! -f "$TEMP" ]]; then
   echo "GPU encode failed — falling back to CPU"
+
+  rm -f "$TEMP"
 
   video_args=(
     -map 0:v:0
@@ -123,13 +136,15 @@ if [[ $status -ne 0 || ! -f "$OUTPUT" ]]; then
     "${video_args[@]}" \
     "${audio_args[@]}" \
     "${misc_args[@]}" \
-    "$OUTPUT"
+    "$TEMP"
 fi
 
-# --------------------------------------------------
-# Replace original
-# --------------------------------------------------
-if [[ -f "$OUTPUT" ]]; then
-    sleep 1
-    mv -f -- "$OUTPUT_PATH" "$INPUT"
+# ------------------------
+# ATOMIC REPLACE (SONARR SAFE)
+# ------------------------
+if [[ -f "$TEMP" ]]; then
+  mv -f "$TEMP" "$INPUT"
+else
+  echo "Transcode failed — original file left untouched"
+  exit 1
 fi
