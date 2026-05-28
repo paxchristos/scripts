@@ -6,68 +6,114 @@ param (
 )
 
 $videoTranscode = $false
+$maxHeight = 1080
+
+# ----------------------------
+# Probe video stream
+# ----------------------------
 
 $video_stream = ffprobe -v error `
     -select_streams v:0 `
-    -show_entries stream=codec_name,height,bit_rate `
+    -show_entries stream=codec_name,height,bit_rate,color_transfer `
     -of csv=p=0 `
     "$Full_Path" |
-ConvertFrom-Csv -Header codec,height,bitrate
+ConvertFrom-Csv -Header codec,height,bitrate,color_transfer
+
+# ----------------------------
+# Probe audio streams
+# ----------------------------
 
 $audio_streams = ffprobe -v error -select_streams a `
     -show_entries stream=index,codec_name,channels,bit_rate `
     -of csv=p=0  "$Full_Path" |
 ConvertFrom-Csv -Header index,codec,channels,bitrate
 
-#Write-Output $video_stream `n 
-#Write-Output $audio_streams
+# ----------------------------
+# Resolution + HDR detection
+# ----------------------------
 
-if ($video_stream.codec -notmatch "hevc")
+$needsDownscale = [int]$video_stream.height -gt $maxHeight
+
+$hdrTransferFunctions = @("smpte2084", "arib-std-b67")
+$needsToneMap = $hdrTransferFunctions -contains $video_stream.color_transfer
+
+# ----------------------------
+# Decide if video must transcode
+# ----------------------------
+
+if (
+    ($video_stream.codec -notmatch "hevc") -or
+    $needsDownscale -or
+    $needsToneMap
+)
 {
     $videoTranscode = $true
 }
 
-<#
-else
-{
-    Write-Output "File already HEVC"
-}
-#>
+# ----------------------------
+# Build video filter chain
+# ----------------------------
 
-#Write-Output "Tracks requiring transcode = $($trackTranscode)"
+$vfParts = @()
+
+if ($needsToneMap)
+{
+    # HDR → SDR tone-mapping
+    $vfParts += "zscale=t=linear:npl=100"
+    $vfParts += "tonemap=hable"
+    $vfParts += "zscale=t=bt709:m=bt709:r=tv"
+}
+
+if ($needsDownscale)
+{
+    # Cap height at 1080, preserve AR
+    $vfParts += "scale=-2:1080"
+}
+
+$videoFilterArgs = @()
+if ($vfParts.Count -gt 0)
+{
+    $videoFilterArgs = @(
+        "-vf", ($vfParts -join ",")
+    )
+}
+
+# ----------------------------
+# Video arguments
+# ----------------------------
 
 $videoArgs = @()
 
 if ($videoTranscode)
 {
-
     # Try GPU first (NVENC)
     $videoArgs = @(
-        "-map", "0:v:0",
+        "-map", "0:v:0"
+    ) + $videoFilterArgs + @(
         "-c:v", "hevc_nvenc",
         "-rc:v", "vbr",
         "-b:v", "2000k",
         "-maxrate:v", "3000k",
         "-bufsize:v", "3000k"
     )
-
-
-    $usingGpu = $true
 }
 else
 {
-    # Already HEVC → copy
+    # Already HEVC + SDR + <=1080p → copy
     $videoArgs += @(
         "-map", "0:v:0",
         "-c:v", "copy"
     )
 }
 
+# ----------------------------
+# Audio arguments
+# ----------------------------
+
 $audioArgs = @()
 
 foreach ($stream in $audio_streams)
 {
-
     $mapIndex = $stream.index - 1
 
     $audioArgs += "-map"
@@ -88,11 +134,19 @@ foreach ($stream in $audio_streams)
     }
 }
 
+# ----------------------------
+# Subs + metadata
+# ----------------------------
+
 $miscArgs = @(
     "-map", "0:s?",
     "-c:s", "copy",
     "-map_metadata", "0"
 )
+
+# ----------------------------
+# Output
+# ----------------------------
 
 $outputPath = [System.IO.Path]::ChangeExtension($Full_Path, ".hevc.mkv")
 
@@ -103,17 +157,19 @@ $ffmpegArgs = @(
     "`"$outputPath`""
 )
 
-
 Start-Process ffmpeg -ArgumentList $ffmpegArgs -Wait -NoNewWindow
 
-if (-not(Test-Path -Path $outputPath -PathType Leaf))
-{
+# ----------------------------
+# CPU fallback if NVENC fails
+# ----------------------------
 
+if (-not (Test-Path -Path $outputPath -PathType Leaf))
+{
     Write-Output "GPU encode failed — falling back to CPU"
 
-    # Replace NVENC with CPU HEVC
     $videoArgs = @(
-        "-map", "0:v:0",
+        "-map", "0:v:0"
+    ) + $videoFilterArgs + @(
         "-c:v", "libx265",
         "-b:v", "2000k",
         "-maxrate:v", "3000k",
@@ -131,9 +187,13 @@ if (-not(Test-Path -Path $outputPath -PathType Leaf))
     Start-Process ffmpeg -ArgumentList $ffmpegArgs -Wait -NoNewWindow
 }
 
+# ----------------------------
+# Replace original file
+# ----------------------------
+
 if (Test-Path -Path $outputPath -PathType Leaf)
 {
-    start-sleep -Seconds 1
+    Start-Sleep -Seconds 1
     Remove-Item $Full_Path -Force -Confirm:$false
     Move-Item -LiteralPath $outputPath -Destination $Full_Path -Force
 }
