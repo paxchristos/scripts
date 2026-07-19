@@ -22,21 +22,57 @@ foreach ($folder in $folders)
 
 $ErrorActionPreference = 'continue'
 
+
+# -------------------------------------------------------
+# Helper: map a subtitle filename to a language tag
+# Returns $null if the file isn't a recognized language
+# -------------------------------------------------------
+function Get-SubtitleLanguageTag {
+    param([string]$filename)
+
+    $name = [System.IO.Path]::GetFileNameWithoutExtension($filename).ToLower()
+
+    # Detect modifiers
+    $isSDH    = $name -match '\bsdh\b'
+    $isForced = $name -match '\bforced\b'
+    $isFull   = $name -match '\bfull\b'
+
+    # Boundary pattern: no adjacent letter on either side
+    # Handles separators like _ - . and start/end of string
+    $b = '(?<![a-z])({0})(?![a-z])'
+
+    # Detect language — extend these patterns for additional languages
+    if     ($name -match ($b -f 'en|eng|english'))        { $lang = "en" }
+    elseif ($name -match ($b -f 'fr|fra|french'))         { $lang = "fr" }
+    elseif ($name -match ($b -f 'de|ger|german'))         { $lang = "de" }
+    elseif ($name -match ($b -f 'es|spa|spanish'))        { $lang = "es" }
+    elseif ($name -match ($b -f 'pt|por|portuguese'))     { $lang = "pt" }
+    elseif ($name -match ($b -f 'it|ita|italian'))        { $lang = "it" }
+    elseif ($name -match ($b -f 'ja|jpn|japanese'))       { $lang = "ja" }
+    elseif ($name -match ($b -f 'zh|chi|chinese'))        { $lang = "zh" }
+    else   { return $null }  # Not a recognized language
+
+    # Build tag: en, en.forced, en.sdh, en.full etc.
+    $tag = $lang
+    if ($isForced) { $tag += ".forced" }
+    if ($isSDH)    { $tag += ".sdh" }
+    if ($isFull)   { $tag += ".full" }
+
+    return $tag
+}
+
+
 $wholeTree = Get-ChildItem -Directory -Recurse
-$original = Get-Location | Select-Object -ExpandProperty Path
+$original  = Get-Location | Select-Object -ExpandProperty Path
+
 foreach ($subfolder in $wholeTree)
 {
     $folder_check = "Subs"
+    $finalFolder  = [System.IO.Path]::GetFileName($($subfolder.FullName))
 
-    
-    $finalFolder = [System.IO.Path]::GetFileName($($subfolder.FullName))
-    #$finalFolder
-    ## Debug exit
-    #Exit
-    ##
     if ($finalFolder -ne $folder_check)
     {
-        #Write-Output "Skipping $FinalFolder"
+        # Not a Subs folder, skip
     }
     else
     {
@@ -47,127 +83,125 @@ foreach ($subfolder in $wholeTree)
         {
             Push-Location $directory
             $folderName = [System.IO.Path]::GetFileName($directory)
-        
-            $subs = Get-ChildItem -Filter *.srt -File
+
+            $subs     = Get-ChildItem -Filter *.srt -File
+            $usedTags = @{}
 
             foreach ($file in $subs)
             {
+                $tag = Get-SubtitleLanguageTag -filename $file.Name
 
-                $newName = $null
-                switch ($file.Name)
+                if ($null -eq $tag)
                 {
-                    "2_English.srt" { $newName = "$folderName.en.srt" }
-                    "3_English.srt" { $newName = "$folderName.en1.srt" }
-                    "2_eng" { $newName = "$folderName.en2.srt" }
-                    "5_English.srt" { $newName = "$folderName.en3.srt" }
-                    "6_English.srt" { $newName = "$folderName.en4.srt" }
-                    "English (forced).srt" { $newName = "$folderName.en5.srt" }
-                    "English (SDH).srt" { $newName = "$folderName.en6.srt" }
-                    default { continue }  # Skip if it doesn't match any case
-                }
-                if ($newName)
-                {
+                    # Unrecognized subtitle — remove it
+                    Write-Host "Removing unrecognized subtitle: $($file.Name)"
                     try
                     {
-                        Rename-Item -Path $file.FullName -NewName $newName -ErrorAction Stop    
-                    }
-                    catch
-                    {
-                        Write-output "Failed to rename`n$($file.Name)`nExiting now`n$_"
-                        exit
-                    }
-                }
-                else
-                {
-                    # File didn't match known list, remove it
-                    try
-                    {
-                        Write-Host "Removing unmatched file: $($file.Name)"
                         Remove-Item -Path $file.FullName -Force -ErrorAction Stop
                     }
                     catch
                     {
                         Write-Warning "Failed to remove $($file.Name): $_"
                     }
+                    continue
                 }
-                
+
+                # Deduplicate: if the same tag appears more than once, append a counter
+                if ($usedTags.ContainsKey($tag))
+                {
+                    $usedTags[$tag]++
+                    $dedupTag = "$tag$($usedTags[$tag])"
+                }
+                else
+                {
+                    $usedTags[$tag] = 0
+                    $dedupTag = $tag
+                }
+
+                $newName = "$folderName.$dedupTag.srt"
+                try
+                {
+                    Rename-Item -Path $file.FullName -NewName $newName -ErrorAction Stop
+                }
+                catch
+                {
+                    Write-Output "Failed to rename`n$($file.Name)`nExiting now`n$_"
+                    exit
+                }
             }
             Pop-Location
         }
 
-        
+        # Move all renamed subs up one level (next to the video files)
         Get-ChildItem *.srt -Recurse | Move-Item -Destination ..\
 
-        ## Remuxes mp4 files into mkv
-        Set-Location ..\ 
+        Set-Location ..\
 
+        # Remux mp4 -> mkv
         $mp4 = Get-ChildItem *.mp4
 
         foreach ($file in $mp4)
         {
-            Write-Host "$file"
-            $tempname = [System.IO.Path]::GetFileNameWithoutExtension($file)
-            $tempname = $tempname + ".mkv"
+            Write-Host "Remuxing: $file"
+            $tempname = [System.IO.Path]::GetFileNameWithoutExtension($file) + ".mkv"
             mkvmerge -o "$tempname" "$file"
             Remove-Item "$file"
         }
 
+        # Merge subtitles into mkv
         $mkv = Get-ChildItem *.mkv
 
         foreach ($file in $mkv)
         {
-            $filename = $file.name
-            $tempname = [io.path]::GetFileNameWithoutExtension($file.name)
+            $filename = $file.Name
+            $tempname = [IO.Path]::GetFileNameWithoutExtension($file.Name)
 
-            $suffixes = @(".en.srt", ".en1.srt", ".en2.srt", ".en3.srt", ".en4.srt")
-            foreach ($suffix in $suffixes)
+            # Try to extract an episode identifier (S01E02, S01E01E02, etc.)
+            $episodeID = $null
+            if ($tempname -match '(?i)(S\d{2}E\d{2}(?:E\d{2})?)')
             {
-                $subtitle = "$tempname$suffix"
-                if (Test-Path -Path $subtitle -PathType Leaf)
+                $episodeID = $Matches[1].ToUpper()
+            }
+
+            # Match subs by episode ID if available, otherwise fall back to stem prefix
+            if ($episodeID)
+            {
+                Write-Host "Matching subs for $filename by episode ID: $episodeID"
+                $matchingSubs = Get-ChildItem -Filter *.srt | Where-Object { $_.Name -match "(?i)$episodeID" }
+            }
+            else
+            {
+                Write-Host "No episode ID found in $filename — falling back to stem prefix match"
+                $matchingSubs = Get-ChildItem -Filter "$tempname.*.srt"
+            }
+
+            if ($matchingSubs)
+            {
+                $subArgs    = $matchingSubs | ForEach-Object { "`"$($_.FullName)`"" }
+                $mergedName = "$tempname.merged.mkv"
+
+                Write-Host "Merging into: $filename"
+                $cmd = "mkvmerge -o `"$mergedName`" `"$($file.FullName)`" $($subArgs -join ' ')"
+                Invoke-Expression $cmd
+
+                if ($LASTEXITCODE -eq 0)
                 {
-                    mkvmerge -o "$tempname" "$filename" "$subtitle"
-                    Remove-Item -Path "$file"
-                    Remove-Item -Path "$subtitle"
-                    Rename-Item -Path "$tempname" -NewName "$filename"
+                    Remove-Item -Path $file.FullName
+                    $matchingSubs | Remove-Item
+                    Rename-Item -Path $mergedName -NewName $filename
                 }
+                else
+                {
+                    Write-Warning "mkvmerge failed for $filename — original files kept"
+                    Remove-Item -Path $mergedName -ErrorAction SilentlyContinue
+                }
+            }
+            else
+            {
+                Write-Host "No subtitles found for: $filename"
             }
         }
     }
 }
+
 Set-Location $original
-<#
-
-        #$folderName
-        ## debug exit 
-        #Exit
-        ## 
-
-
-old parts:
-            <# case switch test
-            if ($file.Name -eq $matching1)
-            {
-                $newName = "$($folderName).en.srt"
-                Rename-Item -Path $file.FullName -NewName $newName
-            }
-            elseif ($file.Name -eq $matching2)
-            {
-                $newName = "$($folderName).en1.srt"
-                Rename-Item -Path $file.FullName -NewName $newName
-            }
-            elseif ($file.Name -eq $matching3)
-            {
-                $newName = "$($folderName).en2.srt"
-                Rename-Item -Path $file.FullName -NewName $newName
-            }
-            elseif ($file.Name -eq $matching4)
-            {
-                $newName = "$($folderName).en3.srt"
-                Rename-Item -Path $file.FullName -NewName $newName
-            }
-            elseif ($file.Name -eq $matching5)
-            {
-                $newName = "$($folderName).en4.srt"
-                Rename-Item -Path $file.FullName -NewName $newName
-            }#>
-#>
